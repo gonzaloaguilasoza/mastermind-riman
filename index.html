@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#ffffff">
+<title>Centro de Recursos — Equipo Riman Mastermind</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+:root {
+  --azul:#1a3a5c; --azul-s:rgba(26,58,92,0.08); --azul-b:rgba(26,58,92,0.2);
+  --txt:#111827; --txt2:#6b7280; --bg:#fff; --card:#f9fafb; --borde:#e5e7eb;
+  --wa:#25d366; --r:14px; --tap:44px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--txt);font-family:'Plus Jakarta Sans',-apple-system,sans-serif;font-size:15px;line-height:1.5;min-height:100vh;-webkit-font-smoothing:antialiased}
+
+/* HEADER */
+header{background:#fff;border-bottom:1px solid var(--borde);position:sticky;top:0;z-index:100;padding:0 20px;padding-top:env(safe-area-inset-top);box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.hi{max-width:880px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}
+.lt{font-size:15px;font-weight:700;color:var(--txt)}
+.ls{font-size:10px;color:var(--azul);letter-spacing:.14em;text-transform:uppercase;font-weight:600;display:block;margin-bottom:1px}
+.pill{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--azul);border:1px solid var(--azul-b);padding:5px 12px;border-radius:20px;font-weight:600}
+
+/* HERO */
+.hero{background:linear-gradient(160deg,#eef2f7 0%,#fff 65%);border-bottom:1px solid var(--borde);padding:32px 20px 28px}
+.hero-in{max-width:880px;margin:0 auto}
+.eyebrow{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--azul);margin-bottom:8px;font-weight:600}
+.hero h1{font-size:clamp(22px,6vw,38px);font-weight:700;line-height:1.15;color:var(--txt)}
+.hero h1 span{color:var(--azul)}
+
+/* SEARCH */
+.sw{max-width:880px;margin:0 auto;padding:16px 20px 0}
+.sb{position:relative}
+.si{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--txt2);pointer-events:none}
+#buscar{width:100%;background:var(--card);border:1px solid var(--borde);color:var(--txt);font-family:inherit;font-size:14px;padding:12px 16px 12px 42px;border-radius:10px;outline:none;height:var(--tap);-webkit-appearance:none}
+#buscar:focus{border-color:var(--azul)}
+#buscar::placeholder{color:#adb5bd}
+
+/* TABS */
+.tw{max-width:880px;margin:0 auto;padding:14px 20px 0;position:relative}
+.ts{display:flex;gap:6px;white-space:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:2px;padding-right:40px}
+.ts::-webkit-scrollbar{display:none}
+.tf{position:absolute;right:16px;top:14px;width:56px;height:36px;background:linear-gradient(to right,transparent,#fff 70%);pointer-events:none;display:flex;align-items:center;justify-content:flex-end;padding-right:2px}
+.tab{background:var(--card);border:1px solid var(--borde);color:var(--txt2);font-family:inherit;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:0 16px;height:34px;border-radius:20px;cursor:pointer;transition:all .18s;display:inline-flex;align-items:center;flex-shrink:0;-webkit-appearance:none}
+.tab.active{background:var(--azul);border-color:var(--azul);color:#fff}
+
+/* MAIN */
+.main{max-width:880px;margin:0 auto;padding:0 20px 48px}
+.sec{margin-top:28px}
+.sec.oculta{display:none}
+.sec-t{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--azul);margin-bottom:12px;display:flex;align-items:center;gap:10px;font-weight:700}
+.sec-t::after{content:'';flex:1;height:1px;background:var(--borde)}
+
+/* CARDS */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(260px,100%),1fr));gap:10px}
+.card{background:var(--card);border:1px solid var(--borde);border-radius:var(--r);padding:16px;text-decoration:none;color:inherit;display:flex;gap:12px;align-items:flex-start;min-height:var(--tap)}
+.card:active{background:#eef2f7;border-color:var(--azul)}
+.ci{width:40px;height:40px;flex-shrink:0;background:#eef2f7;border-radius:10px;display:flex;align-items:center;justify-content:center;border:1px solid var(--borde);color:var(--azul)}
+.ci svg{width:18px;height:18px}
+.cb{flex:1;min-width:0}
+.ct{font-size:14px;font-weight:600;line-height:1.3;margin-bottom:3px;color:var(--txt)}
+.cd{font-size:12px;color:var(--txt2);line-height:1.5}
+.ctag{display:inline-block;margin-top:7px;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--azul);background:var(--azul-s);padding:2px 8px;border-radius:4px;font-weight:700}
+
+/* ACORDEÓN */
+.ac{border:1px solid var(--borde);border-radius:var(--r);overflow:hidden}
+.ac-i{border-bottom:1px solid var(--borde)}
+.ac-i:last-child{border-bottom:none}
+.ac-h{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;background:var(--card);user-select:none;min-height:var(--tap)}
+.ac-h:active{background:#eef2f7}
+.ac-h.open{background:#eef2f7}
+.ac-iw{width:32px;height:32px;background:#fff;border:1px solid var(--borde);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--azul)}
+.ac-iw svg{width:16px;height:16px}
+.ac-n{font-size:14px;font-weight:600;flex:1;color:var(--txt)}
+.ac-f{color:var(--azul);transition:transform .22s;flex-shrink:0}
+.ac-f svg{width:16px;height:16px}
+.ac-h.open .ac-f{transform:rotate(180deg)}
+.ac-b{display:none;padding:8px 16px 12px;background:#fff}
+.ac-b.open{display:block}
+.ac-sub{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--azul);padding:8px 4px 6px;border-bottom:1px solid var(--borde);margin-bottom:6px}
+.ac-row{display:flex;align-items:center;gap:8px;margin-bottom:2px}
+.ac-link{display:flex;align-items:center;gap:8px;padding:10px;border-radius:8px;text-decoration:none;color:var(--txt);font-size:13px;font-weight:500;flex:1;min-height:var(--tap)}
+.ac-link:active{background:#eef2f7}
+.ac-li{color:var(--azul);flex-shrink:0}
+.ac-li svg{width:15px;height:15px}
+.ac-ln{flex:1}
+.ac-lt{font-size:10px;color:var(--txt2);text-transform:uppercase;letter-spacing:.07em;font-weight:600}
+.ac-act{display:flex;gap:6px;flex-shrink:0}
+.bwa{background:var(--wa);border:none;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.bwa svg{width:17px;height:17px;fill:#fff}
+.bdl{background:var(--azul);border:none;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;text-decoration:none;color:#fff}
+.bdl svg{width:17px;height:17px;stroke:#fff;fill:none}
+
+/* GALERÍA */
+.gg{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:4px 0;}
+.gi,.galeria-item{height:160px;border-radius:10px;overflow:hidden;cursor:pointer;border:0.5px solid var(--borde);position:relative;background:var(--card)}
+.gi img,.galeria-item img{width:100%;height:100%;object-fit:cover;display:block}
+.wa-badge{position:absolute;bottom:6px;right:6px;background:var(--wa);border-radius:6px;padding:3px 8px;font-size:10px;font-weight:700;color:#fff}
+
+/* CALCULADORA */
+.calc-item{background:#fff;border-radius:10px;padding:12px 14px;cursor:pointer;border:1px solid var(--borde);transition:border-color .18s;}
+.calc-item:active,.calc-item.selected{border-color:var(--azul);background:#f0f7ff;}
+.calc-row{display:flex;justify-content:space-between;align-items:center;gap:8px;}
+.calc-nombre{font-size:13px;font-weight:500;color:var(--txt);}
+.calc-precio{font-size:14px;font-weight:700;color:var(--azul);white-space:nowrap;}
+.calc-pts{font-size:11px;color:var(--txt2);margin-top:4px;}
+
+
+/* CALCULADORA FLOTANTE */
+#calc-fab{position:fixed;bottom:24px;right:20px;width:56px;height:56px;background:#1a3a5c;border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:200;box-shadow:0 4px 16px rgba(26,58,92,.35);}
+#calc-fab svg{width:24px;height:24px;stroke:#fff;fill:none;}
+#calc-panel{position:fixed;bottom:92px;right:16px;width:calc(100vw - 32px);max-width:380px;background:#fff;border-radius:20px;box-shadow:0 8px 32px rgba(0,0,0,.18);z-index:200;display:none;overflow:hidden;border:1px solid var(--borde);}
+#calc-panel.open{display:block;}
+.cp-header{background:#1a3a5c;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;}
+.cp-title{font-size:14px;font-weight:700;color:#fff;}
+.cp-close{background:transparent;border:none;color:rgba(255,255,255,.7);font-size:20px;cursor:pointer;line-height:1;padding:0;}
+.cp-body{padding:14px 16px;max-height:70vh;overflow-y:auto;}
+.cp-tabs{display:flex;gap:6px;margin-bottom:12px;}
+
+.cp-tab{flex:1;height:32px;border-radius:20px;border:1px solid var(--borde);background:var(--card);color:var(--txt2);font-family:inherit;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;}
+.cp-tab.active{background:#1a3a5c;border-color:#1a3a5c;color:#fff;}
+.cp-list{display:flex;flex-direction:column;gap:6px;}
+.cp-item{background:var(--card);border:1px solid var(--borde);border-radius:10px;padding:11px 14px;cursor:pointer;}
+.cp-item.sel{border-color:#1a3a5c;background:#eef2f7;}
+.cp-item-row{display:flex;justify-content:space-between;align-items:center;}
+.cp-nombre{font-size:13px;font-weight:500;color:var(--txt);}
+.cp-precio{font-size:14px;font-weight:700;color:#1a3a5c;white-space:nowrap;}
+.cp-pts{font-size:11px;color:var(--txt2);margin-top:3px;}
+.cp-res{background:#eef2f7;border-radius:12px;padding:14px;margin-top:12px;display:none;}
+.cp-res.show{display:block;}
+.cp-res-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.cp-res-label{font-size:12px;color:var(--txt2);}
+.cp-res-val{font-size:16px;font-weight:700;color:#1a3a5c;}
+.cp-res-div{height:1px;background:var(--borde);margin:10px 0;}
+.cp-res-pts{font-size:16px;font-weight:700;color:#0f6e56;}
+
+/* COPY BTN */
+.bcopy{background:var(--azul);border:none;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:opacity .18s;}
+.bcopy:active{opacity:.7}
+.bcopy svg{width:16px;height:16px;stroke:#ffffff;fill:none;color:#ffffff;}
+.bcopy.copied{background:#25d366;}
+
+/* FOOTER */
+footer{border-top:1px solid var(--borde);padding:20px;text-align:center;background:var(--card)}
+footer p{font-size:11px;color:var(--txt2)}
+
+@media(max-width:600px){.grid{grid-template-columns:1fr}.pill{display:none}}
+@media(min-width:601px) and (max-width:768px){.grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="ico-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></symbol>
+  <symbol id="ico-photo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></symbol>
+  <symbol id="ico-file" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></symbol>
+  <symbol id="ico-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></symbol>
+  <symbol id="ico-mic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></symbol>
+  <symbol id="ico-zoom" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></symbol>
+  <symbol id="ico-award" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></symbol>
+  <symbol id="ico-gift" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></symbol>
+  <symbol id="ico-grad" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></symbol>
+  <symbol id="ico-money" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></symbol>
+  <symbol id="ico-video" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></symbol>
+  <symbol id="ico-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></symbol>
+  <symbol id="ico-copy" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></symbol>
+  <symbol id="ico-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
+  <symbol id="ico-scan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 012-2h2M17 3h2a2 2 0 012 2v2M21 17v2a2 2 0 01-2 2h-2M7 21H5a2 2 0 01-2-2v-2"/><line x1="3" y1="12" x2="21" y2="12"/></symbol>
+  <symbol id="ico-wa" viewBox="0 0 24 24"><path fill="#fff" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></symbol>
+</svg>
+
+<header>
+  <div class="hi">
+    <div><span class="ls">Equipo Riman Mastermind</span><span class="lt">Centro de Recursos</span></div>
+    <svg viewBox="0 0 160 30" xmlns="http://www.w3.org/2000/svg" style="height:24px;width:auto;"><text x="2" y="24" font-family="Georgia,serif" font-size="26" font-weight="700" letter-spacing="6" fill="#1a3a5c">RIMAN</text></svg>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-in">
+    <p class="eyebrow">Equipo Riman Mastermind</p>
+    <h1>Todo lo que necesitas,<br><span>en un solo lugar.</span></h1>
+  </div>
+</section>
+
+<div class="sw">
+  <div class="sb">
+    <span class="si"><svg width="16" height="16"><use href="#ico-search"/></svg></span>
+    <input type="search" id="buscar" placeholder="Buscar recurso..." oninput="buscar()" autocomplete="off">
+  </div>
+</div>
+
+<div class="tw">
+  <div class="ts" id="tabsScroll">
+    <button class="tab active" onclick="filtrar('todo',this)">Todo</button>
+    <button class="tab" onclick="filtrar('negocio',this)">Negocio</button>
+    <button class="tab" onclick="filtrar('escaner',this)">Escáner</button>
+    <button class="tab" onclick="filtrar('compensacion',this)">Plan de Comp.</button>
+    <button class="tab" onclick="filtrar('pdfs',this)">PDFs</button>
+    <button class="tab" onclick="filtrar('testimonios',this)">Testimonios</button>
+    <button class="tab" onclick="filtrar('academia',this)">Academia</button>
+    <button class="tab" onclick="filtrar('zoom',this)">Zoom</button>
+    <button class="tab" onclick="filtrar('plantillas',this)">Plantillas</button>
+    <button class="tab" onclick="filtrar('calculadora',this)">Calculadora</button>
+  </div>
+  <div class="tf" id="tabsFade">
+    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#1a3a5c" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- 1. NEGOCIO -->
+  <div class="sec" data-cat="negocio">
+    <div class="sec-t">Presentación del Negocio</div>
+    <div class="grid">
+      <a class="card" href="https://canva.link/3scrsdhgyruf2et" target="_blank">
+        <div class="ci"><svg><use href="#ico-chart"/></svg></div>
+        <div class="cb"><div class="ct">Presentación del Negocio</div><div class="cd">Canva oficial para mostrar la oportunidad Riman</div><span class="ctag">Canva</span></div>
+      </a>
+    </div>
+  </div>
+
+  <!-- 2. ESCÁNER -->
+  <div class="sec" data-cat="escaner">
+    <div class="sec-t">Diagnóstico de Piel con IA</div>
+    <div class="grid">
+      <a class="card" href="https://gonzaloaguilasoza.github.io/riman-test/" target="_blank">
+        <div class="ci"><svg><use href="#ico-scan"/></svg></div>
+        <div class="cb"><div class="ct">Diagnóstico de Piel con IA</div><div class="cd">Úsalo en vivo con tu prospecto para identificar su tipo de piel y recomendar productos personalizados</div><span class="ctag">Herramienta</span></div>
+      </a>
+    </div>
+  </div>
+
+  <!-- 3. PLAN DE COMPENSACIÓN -->
+  <div class="sec" data-cat="compensacion">
+    <div class="sec-t">Plan de Compensación</div>
+    <div class="ac">
+      <div class="ac-i">
+        <div class="ac-h" onclick="toggleAc(this)">
+          <div class="ac-iw"><svg><use href="#ico-money"/></svg></div>
+          <span class="ac-n">Plan de Compensación</span>
+          <span class="ac-f"><svg><use href="#ico-chevron"/></svg></span>
+        </div>
+        <div class="ac-b">
+          <div class="ac-sub">Introducción</div>
+          <div class="ac-row"><a class="ac-link" href="https://youtu.be/HSWrKP4qbqk" target="_blank"><span class="ac-li"><svg><use href="#ico-video"/></svg></span><span class="ac-ln">Estructura de Rangos</span><span class="ac-lt">Video</span></a></div>
+          <div class="ac-row"><a class="ac-link" href="LINK_VIDEO_INTRO" target="_blank"><span class="ac-li"><svg><use href="#ico-video"/></svg></span><span class="ac-ln">Ciclos y Requisitos para Comisionar</span><span class="ac-lt">Video</span></a></div>
+          <div class="ac-sub" style="margin-top:8px">Los 6 Bonos</div>
+          <div class="ac-row"><a class="ac-link" href="https://www.youtube.com/watch?v=R8KWmspEKHQ" target="_blank"><span class="ac-li"><svg><use href="#ico-video"/></svg></span><span class="ac-ln">Bono 1 — Minorista</span><span class="ac-lt">Video</span></a></div>
+          <div class="ac-row"><a class="ac-link" href="https://youtu.be/3sJwkDPrKqw" target="_blank"><span class="ac-li"><svg><use href="#ico-video"/></svg></span><span class="ac-ln">Bono 2 — Top Minorista</span><span class="ac-lt">Video</span></a></div>
+          <div class="ac-row"><a class="ac-link" href="https://youtu.be/MXagiWxWIXM" target="_blank"><span class="ac-li"><svg><use href="#ico-video"/></svg></span><span class="ac-ln">Bono 3 — Patrocinio</span><span class="ac-lt">Video</span></a></div>
+          <div class="ac-row"><a class="ac-link" href="https://youtu.be/mNHfGARtZrk" target="_blank"><span class="ac-li"><svg><use href="#ico-video"/></svg></span><span class="ac-ln">Bono 4 — Grupo Abierto</span><span class="ac-lt">Video</span></a></div>
+          <div class="ac-row"><a class="ac-link" href="https://youtu.be/9enIa27s-3k" target="_blank"><span class="ac-li"><svg><use href="#ico-video"/></svg></span><span class="ac-ln">Bono 5 — Uni-Nivel</span><span class="ac-lt">Video</span></a></div>
+          <div class="ac-row"><a class="ac-link" href="https://youtu.be/ZXQjRJZEQqY" target="_blank"><span class="ac-li"><svg><use href="#ico-video"/></svg></span><span class="ac-ln">Bono 6 — Igualación de Liderazgo</span><span class="ac-lt">Video</span></a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. PDFs -->
+  <div class="sec" data-cat="pdfs">
+    <div class="sec-t">PDFs de Productos</div>
+    <div class="ac">
+      <div class="ac-i">
+        <div class="ac-h" onclick="toggleAc(this)">
+          <div class="ac-iw"><svg><use href="#ico-file"/></svg></div>
+          <span class="ac-n">ICD — Línea Skincare</span>
+          <span class="ac-f"><svg><use href="#ico-chevron"/></svg></span>
+        </div>
+        <div class="ac-b">
+          <div class="ac-row"><a class="ac-link" href="https://drive.google.com/uc?export=view&id=1T2ybsZhRiqoLk9yzUhZi3CL9i5NFkaKr" target="_blank"><span class="ac-li"><svg><use href="#ico-file"/></svg></span><span class="ac-ln">Aceite Limpiador Hidratante</span><span class="ac-lt">PDF</span></a><div class="ac-act"><button class="bwa" onclick="waSend('https://drive.google.com/uc?export=view&id=1T2ybsZhRiqoLk9yzUhZi3CL9i5NFkaKr','Aceite Limpiador Hidratante')"><svg><use href="#ico-wa"/></svg></button><a class="bdl" href="https://drive.google.com/uc?export=view&id=1T2ybsZhRiqoLk9yzUhZi3CL9i5NFkaKr" download target="_blank"><svg><use href="#ico-download"/></svg></a></div></div>
+          <div class="ac-row"><a class="ac-link" href="https://drive.google.com/uc?export=view&id=1N1tIB5PcV-uyqeBhNgbtaMBnuc70IvMP" target="_blank"><span class="ac-li"><svg><use href="#ico-file"/></svg></span><span class="ac-ln">Aceite Bifásico Facial</span><span class="ac-lt">PDF</span></a><div class="ac-act"><button class="bwa" onclick="waSend('https://drive.google.com/uc?export=view&id=1N1tIB5PcV-uyqeBhNgbtaMBnuc70IvMP','Aceite Bifásico Facial')"><svg><use href="#ico-wa"/></svg></button><a class="bdl" href="https://drive.google.com/uc?export=view&id=1N1tIB5PcV-uyqeBhNgbtaMBnuc70IvMP" download target="_blank"><svg><use href="#ico-download"/></svg></a></div></div>
+          <div class="ac-row"><a class="ac-link" href="https://drive.google.com/uc?export=view&id=1-Sa8y-pJ2uvA3Bd_6FR9AGK8JJBJh0ni" target="_blank"><span class="ac-li"><svg><use href="#ico-file"/></svg></span><span class="ac-ln">Gel Equilibrante y Calmante</span><span class="ac-lt">PDF</span></a><div class="ac-act"><button class="bwa" onclick="waSend('https://drive.google.com/uc?export=view&id=1-Sa8y-pJ2uvA3Bd_6FR9AGK8JJBJh0ni','Gel Equilibrante y Calmante')"><svg><use href="#ico-wa"/></svg></button><a class="bdl" href="https://drive.google.com/uc?export=view&id=1-Sa8y-pJ2uvA3Bd_6FR9AGK8JJBJh0ni" download target="_blank"><svg><use href="#ico-download"/></svg></a></div></div>
+          <div class="ac-row"><a class="ac-link" href="https://drive.google.com/uc?export=view&id=1LWYCWaZgbm6XNKMY2wUX6f2qv72jEeuP" target="_blank"><span class="ac-li"><svg><use href="#ico-file"/></svg></span><span class="ac-ln">BooSeBoo — Set de Hidratación Intensiva</span><span class="ac-lt">PDF</span></a><div class="ac-act"><button class="bwa" onclick="waSend('https://drive.google.com/uc?export=view&id=1LWYCWaZgbm6XNKMY2wUX6f2qv72jEeuP','BooSeBoo')"><svg><use href="#ico-wa"/></svg></button><a class="bdl" href="https://drive.google.com/uc?export=view&id=1LWYCWaZgbm6XNKMY2wUX6f2qv72jEeuP" download target="_blank"><svg><use href="#ico-download"/></svg></a></div></div>
+          <div class="ac-row"><a class="ac-link" href="https://drive.google.com/uc?export=view&id=1hAVQAGSFJUiN3T88_saQ6cqZohZtyBGQ" target="_blank"><span class="ac-li"><svg><use href="#ico-file"/></svg></span><span class="ac-ln">Crema Hidratante Facial</span><span class="ac-lt">PDF</span></a><div class="ac-act"><button class="bwa" onclick="waSend('https://drive.google.com/uc?export=view&id=1hAVQAGSFJUiN3T88_saQ6cqZohZtyBGQ','Crema Hidratante Facial')"><svg><use href="#ico-wa"/></svg></button><a class="bdl" href="https://drive.google.com/uc?export=view&id=1hAVQAGSFJUiN3T88_saQ6cqZohZtyBGQ" download target="_blank"><svg><use href="#ico-download"/></svg></a></div></div>
+          <div class="ac-row"><a class="ac-link" href="https://drive.google.com/uc?export=view&id=1-BFc22Qry3EVfiH-WD7B-uVM3BrVFZQV" target="_blank"><span class="ac-li"><svg><use href="#ico-file"/></svg></span><span class="ac-ln">Protector Solar SPF50+</span><span class="ac-lt">PDF</span></a><div class="ac-act"><button class="bwa" onclick="waSend('https://drive.google.com/uc?export=view&id=1-BFc22Qry3EVfiH-WD7B-uVM3BrVFZQV','Protector Solar SPF50+')"><svg><use href="#ico-wa"/></svg></button><a class="bdl" href="https://drive.google.com/uc?export=view&id=1-BFc22Qry3EVfiH-WD7B-uVM3BrVFZQV" download target="_blank"><svg><use href="#ico-download"/></svg></a></div></div>
+          <div class="ac-row"><a class="ac-link" href="https://drive.google.com/uc?export=view&id=1mHDh7jm1NoNu8acNsb5aMCTUtXtDqth5" target="_blank"><span class="ac-li"><svg><use href="#ico-file"/></svg></span><span class="ac-ln">Bálsamo Humectante — Extra</span><span class="ac-lt">PDF</span></a><div class="ac-act"><button class="bwa" onclick="waSend('https://drive.google.com/uc?export=view&id=1mHDh7jm1NoNu8acNsb5aMCTUtXtDqth5','Bálsamo Humectante')"><svg><use href="#ico-wa"/></svg></button><a class="bdl" href="https://drive.google.com/uc?export=view&id=1mHDh7jm1NoNu8acNsb5aMCTUtXtDqth5" download target="_blank"><svg><use href="#ico-download"/></svg></a></div></div>
+        </div>
+      </div>
+      <div class="ac-i">
+        <div class="ac-h" onclick="toggleAc(this)">
+          <div class="ac-iw"><svg><use href="#ico-file"/></svg></div>
+          <span class="ac-n">Botalab</span>
+          <span class="ac-f"><svg><use href="#ico-chevron"/></svg></span>
+        </div>
+        <div class="ac-b">
+          <div class="ac-sub">Capilar</div>
+          <div class="ac-row"><a class="ac-link" href="https://drive.google.com/uc?export=view&id=1Vn8LAKHDlk_MRczdn0hitIhI_rhD1SBE" target="_blank"><span class="ac-li"><svg><use href="#ico-file"/></svg></span><span class="ac-ln">Deserticola Plus Shampoo</span><span class="ac-lt">PDF</span></a><div class="ac-act"><button class="bwa" onclick="waSend('https://drive.google.com/uc?export=view&id=1Vn8LAKHDlk_MRczdn0hitIhI_rhD1SBE','Deserticola Plus Shampoo')"><svg><use href="#ico-wa"/></svg></button><a class="bdl" href="https://drive.google.com/uc?export=view&id=1Vn8LAKHDlk_MRczdn0hitIhI_rhD1SBE" download target="_blank"><svg><use href="#ico-download"/></svg></a></div></div>
+          <div class="ac-row"><a class="ac-link" href="https://drive.google.com/uc?export=view&id=1dxAyLxgLcuzMU3WnpMADv2WJBu5D6Mf9" target="_blank"><span class="ac-li"><svg><use href="#ico-file"/></svg></span><span class="ac-ln">Deserticola Plus Acondicionador</span><span class="ac-lt">PDF</span></a><div class="ac-act"><button class="bwa" onclick="waSend('https://drive.google.com/uc?export=view&id=1dxAyLxgLcuzMU3WnpMADv2WJBu5D6Mf9','Deserticola Plus Acondicionador')"><svg><use href="#ico-wa"/></svg></button><a class="bdl" href="https://drive.google.com/uc?export=view&id=1dxAyLxgLcuzMU3WnpMADv2WJBu5D6Mf9" download target="_blank"><svg><use href="#ico-download"/></svg></a></div></div>
+          <div class="ac-row"><a class="ac-link" href="https://drive.google.com/uc?export=view&id=1_1RAfJzJyCPOiVYNnLOhQQSZbIJ30Db7" target="_blank"><span class="ac-li"><svg><use href="#ico-file"/></svg></span><span class="ac-ln">Deserticola Plus Serum Capilar</span><span class="ac-lt">PDF</span></a><div class="ac-act"><button class="bwa" onclick="waSend('https://drive.google.com/uc?export=view&id=1_1RAfJzJyCPOiVYNnLOhQQSZbIJ30Db7','Deserticola Plus Serum Capilar')"><svg><use href="#ico-wa"/></svg></button><a class="bdl" href="https://drive.google.com/uc?export=view&id=1_1RAfJzJyCPOiVYNnLOhQQSZbIJ30Db7" download target="_blank"><svg><use href="#ico-download"/></svg></a></div></div>
+          <div class="ac-sub" style="margin-top:8px">Corporal</div>
+          <div class="ac-row"><a class="ac-link" href="https://drive.google.com/uc?export=view&id=1M7unu1X6zBohPKdEakN4mi_h7c8hfkWt" target="_blank"><span class="ac-li"><svg><use href="#ico-file"/></svg></span><span class="ac-ln">Suamel Gel de Baño Nutritivo</span><span class="ac-lt">PDF</span></a><div class="ac-act"><button class="bwa" onclick="waSend('https://drive.google.com/uc?export=view&id=1M7unu1X6zBohPKdEakN4mi_h7c8hfkWt','Suamel Gel de Baño Nutritivo')"><svg><use href="#ico-wa"/></svg></button><a class="bdl" href="https://drive.google.com/uc?export=view&id=1M7unu1X6zBohPKdEakN4mi_h7c8hfkWt" download target="_blank"><svg><use href="#ico-download"/></svg></a></div></div>
+          <div class="ac-row"><a class="ac-link" href="https://drive.google.com/uc?export=view&id=1JkgbGbOhJH17Pog4SMKsdPY1nRBhP0zj" target="_blank"><span class="ac-li"><svg><use href="#ico-file"/></svg></span><span class="ac-ln">Suamel Crema Corporal Hidratante</span><span class="ac-lt">PDF</span></a><div class="ac-act"><button class="bwa" onclick="waSend('https://drive.google.com/uc?export=view&id=1JkgbGbOhJH17Pog4SMKsdPY1nRBhP0zj','Suamel Crema Corporal Hidratante')"><svg><use href="#ico-wa"/></svg></button><a class="bdl" href="https://drive.google.com/uc?export=view&id=1JkgbGbOhJH17Pog4SMKsdPY1nRBhP0zj" download target="_blank"><svg><use href="#ico-download"/></svg></a></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. TESTIMONIOS -->
+  <div class="sec" data-cat="testimonios">
+    <div class="sec-t">Testimonios por Producto</div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div class="ac-i" style="border:1px solid var(--borde);border-radius:var(--r);overflow:hidden;">
+        <div class="ac-h" onclick="toggleAc(this)">
+          <div class="ac-iw"><svg><use href="#ico-photo"/></svg></div>
+          <span class="ac-n">ICD — Rutina Skincare</span>
+          <span class="ac-f"><svg><use href="#ico-chevron"/></svg></span>
+        </div>
+        <div class="ac-b">
+          <div class="gg">
+            <div class="galeria-item" onclick="abrirLightbox('https://gonzaloaguilasoza.github.io/mastermind-riman/fotos/icd/1.jpg','ICD Resultado 1')">
+              <img src="https://gonzaloaguilasoza.github.io/mastermind-riman/fotos/icd/1.jpg" alt="ICD Resultado 1" loading="lazy">
+              <span class="wa-badge">WA</span>
+            </div>
+            <div class="galeria-item" onclick="abrirLightbox('https://gonzaloaguilasoza.github.io/mastermind-riman/fotos/icd/2.jpg','ICD Resultado 2')">
+              <img src="https://gonzaloaguilasoza.github.io/mastermind-riman/fotos/icd/2.jpg" alt="ICD Resultado 2" loading="lazy">
+              <span class="wa-badge">WA</span>
+            </div>
+            <div class="galeria-item" onclick="abrirLightbox('https://gonzaloaguilasoza.github.io/mastermind-riman/fotos/icd/3.jpg','ICD Resultado 3')">
+              <img src="https://gonzaloaguilasoza.github.io/mastermind-riman/fotos/icd/3.jpg" alt="ICD Resultado 3" loading="lazy">
+              <span class="wa-badge">WA</span>
+            </div>
+            <div class="galeria-item" onclick="abrirLightbox('https://gonzaloaguilasoza.github.io/mastermind-riman/fotos/icd/4.jpg','ICD Resultado 4')">
+              <img src="https://gonzaloaguilasoza.github.io/mastermind-riman/fotos/icd/4.jpg" alt="ICD Resultado 4" loading="lazy">
+              <span class="wa-badge">WA</span>
+            </div>
+            <div class="galeria-item" onclick="abrirLightbox('https://gonzaloaguilasoza.github.io/mastermind-riman/fotos/icd/5.jpg','ICD Resultado 5')">
+              <img src="https://gonzaloaguilasoza.github.io/mastermind-riman/fotos/icd/5.jpg" alt="ICD Resultado 5" loading="lazy">
+              <span class="wa-badge">WA</span>
+            </div>
+            <div class="galeria-item" onclick="abrirLightbox('https://gonzaloaguilasoza.github.io/mastermind-riman/fotos/icd/6.jpg','ICD Resultado 6')">
+              <img src="https://gonzaloaguilasoza.github.io/mastermind-riman/fotos/icd/6.jpg" alt="ICD Resultado 6" loading="lazy">
+              <span class="wa-badge">WA</span>
+            </div>
+            <div class="galeria-item" onclick="abrirLightbox('https://gonzaloaguilasoza.github.io/mastermind-riman/fotos/icd/7.jpg','ICD Resultado 7')">
+              <img src="https://gonzaloaguilasoza.github.io/mastermind-riman/fotos/icd/7.jpg" alt="ICD Resultado 7" loading="lazy">
+              <span class="wa-badge">WA</span>
+            </div>
+            <div class="galeria-item" onclick="abrirLightbox('https://gonzaloaguilasoza.github.io/mastermind-riman/fotos/icd/8.jpg','ICD Resultado 8')">
+              <img src="https://gonzaloaguilasoza.github.io/mastermind-riman/fotos/icd/8.jpg" alt="ICD Resultado 8" loading="lazy">
+              <span class="wa-badge">WA</span>
+            </div>
+            <div class="galeria-item" onclick="abrirLightbox('https://gonzaloaguilasoza.github.io/mastermind-riman/fotos/icd/9.jpg','ICD Resultado 9')">
+              <img src="https://gonzaloaguilasoza.github.io/mastermind-riman/fotos/icd/9.jpg" alt="ICD Resultado 9" loading="lazy">
+              <span class="wa-badge">WA</span>
+            </div>
+            <div class="galeria-item" onclick="abrirLightbox('https://gonzaloaguilasoza.github.io/mastermind-riman/fotos/icd/10.jpg','ICD Resultado 10')">
+              <img src="https://gonzaloaguilasoza.github.io/mastermind-riman/fotos/icd/10.jpg" alt="ICD Resultado 10" loading="lazy">
+              <span class="wa-badge">WA</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ac-i" style="border:1px solid var(--borde);border-radius:var(--r);overflow:hidden;">
+        <div class="ac-h" onclick="toggleAc(this)">
+          <div class="ac-iw"><svg><use href="#ico-photo"/></svg></div>
+          <span class="ac-n">Botalab</span>
+          <span class="ac-f"><svg><use href="#ico-chevron"/></svg></span>
+        </div>
+        <div class="ac-b">
+          <div class="gg">
+            <div class="gi" onclick="abrirLightbox('https://gonzaloaguilasoza.github.io/mastermind-riman/fotos/botalab/1.jpg','Botalab Resultado 1')">
+              <img src="https://gonzaloaguilasoza.github.io/mastermind-riman/fotos/botalab/1.jpg" alt="Botalab Resultado 1" loading="lazy">
+              <span class="wa-badge">WA</span>
+            </div>
+            <div class="gi" onclick="abrirLightbox('https://gonzaloaguilasoza.github.io/mastermind-riman/fotos/botalab/2.jpg','Botalab Resultado 2')">
+              <img src="https://gonzaloaguilasoza.github.io/mastermind-riman/fotos/botalab/2.jpg" alt="Botalab Resultado 2" loading="lazy">
+              <span class="wa-badge">WA</span>
+            </div>
+            <div class="gi" onclick="abrirLightbox('https://gonzaloaguilasoza.github.io/mastermind-riman/fotos/botalab/3.jpg','Botalab Resultado 3')">
+              <img src="https://gonzaloaguilasoza.github.io/mastermind-riman/fotos/botalab/3.jpg" alt="Botalab Resultado 3" loading="lazy">
+              <span class="wa-badge">WA</span>
+            </div>
+            <div class="gi" onclick="abrirLightbox('https://gonzaloaguilasoza.github.io/mastermind-riman/fotos/botalab/4.jpg','Botalab Resultado 4')">
+              <img src="https://gonzaloaguilasoza.github.io/mastermind-riman/fotos/botalab/4.jpg" alt="Botalab Resultado 4" loading="lazy">
+              <span class="wa-badge">WA</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 6. ACADEMIA -->
+  <div class="sec" data-cat="academia">
+    <div class="sec-t">Academia Mastermind</div>
+    <div style="background:#eef2f7;border-radius:16px;padding:16px;display:flex;align-items:center;gap:14px;">
+      <div style="width:48px;height:48px;background:#1a3a5c;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg width="22" height="22" fill="none" stroke="#ffffff" stroke-width="2" style="filter:brightness(10)"><use href="#ico-grad"/></svg>
+      </div>
+      <div style="flex:1;min-width:0;overflow:hidden;">
+        <p style="font-size:15px;font-weight:700;color:#0c2240;margin:0 0 3px;">Academia Mastermind</p>
+        <p style="font-size:11px;color:#4a6480;margin:0;">Área Socios: <strong>572934</strong> &nbsp;·&nbsp; Clave: <strong>RIMAN2025</strong></p>
+      </div>
+      <a href="https://www.wearemastermind.com" target="_blank" style="background:#1a3a5c;color:#fff;font-family:inherit;font-size:12px;font-weight:700;padding:10px 16px;border-radius:10px;text-decoration:none;white-space:nowrap;flex-shrink:0;">Entrar</a>
+    </div>
+  </div>
+
+  <!-- 7. ZOOM + PODCAST -->
+  <div class="sec" data-cat="zoom">
+    <div class="sec-t">Zoom &amp; Podcast</div>
+    <div class="ac">
+      <div class="ac-i">
+        <div class="ac-h" onclick="toggleAc(this)">
+          <div class="ac-iw" style="background:#e8f5f0;border-color:#c0e8d8;color:#0f6e56;"><svg><use href="#ico-zoom"/></svg></div>
+          <span class="ac-n">Links de Zoom</span>
+          <span class="ac-f" style="color:#0f6e56;"><svg><use href="#ico-chevron"/></svg></span>
+        </div>
+        <div class="ac-b">
+          <div class="ac-row"><a class="ac-link" href="https://us06web.zoom.us/j/81361543055?pwd=DU0NvZwb1j6aVWTlZhZPBkdDehom3J.1" target="_blank"><span class="ac-li" style="color:#0f6e56;"><svg><use href="#ico-zoom"/></svg></span><span class="ac-ln">Riman 360</span><span class="ac-lt">Zoom</span></a><div class="ac-act"><button class="bcopy" onclick="copiarLink('https://us06web.zoom.us/j/81361543055?pwd=DU0NvZwb1j6aVWTlZhZPBkdDehom3J.1',this)" title="Copiar link"><svg><use href="#ico-copy"/></svg></button></div></div>
+          <div class="ac-row"><a class="ac-link" href="https://us06web.zoom.us/j/82878101302?pwd=ZSbqzec3Qc2JEqpCnn5bTzX7ppaj8A.1" target="_blank"><span class="ac-li" style="color:#0f6e56;"><svg><use href="#ico-zoom"/></svg></span><span class="ac-ln">Zona Master</span><span class="ac-lt">Zoom</span></a><div class="ac-act"><button class="bcopy" onclick="copiarLink('https://us06web.zoom.us/j/82878101302?pwd=ZSbqzec3Qc2JEqpCnn5bTzX7ppaj8A.1',this)" title="Copiar link"><svg><use href="#ico-copy"/></svg></button></div></div>
+          <div class="ac-row"><a class="ac-link" href="https://us06web.zoom.us/j/87818007907?pwd=S5kQMNPwVUMsvVGedCkWqsSGJCzoaq.1" target="_blank"><span class="ac-li" style="color:#0f6e56;"><svg><use href="#ico-zoom"/></svg></span><span class="ac-ln">Presentación de Negocio</span><span class="ac-lt">Zoom</span></a><div class="ac-act"><button class="bcopy" onclick="copiarLink('https://us06web.zoom.us/j/87818007907?pwd=S5kQMNPwVUMsvVGedCkWqsSGJCzoaq.1',this)" title="Copiar link"><svg><use href="#ico-copy"/></svg></button></div></div>
+        </div>
+      </div>
+      <div class="ac-i">
+        <div class="ac-h" onclick="toggleAc(this)">
+          <div class="ac-iw" style="background:#e8f5f0;border-color:#c0e8d8;color:#0f6e56;"><svg><use href="#ico-mic"/></svg></div>
+          <span class="ac-n">Mentes Maestras</span>
+          <span class="ac-f" style="color:#0f6e56;"><svg><use href="#ico-chevron"/></svg></span>
+        </div>
+        <div class="ac-b">
+          <div class="ac-row"><a class="ac-link" href="https://mixlr.com/mentesmaestras" target="_blank"><span class="ac-li" style="color:#0f6e56;"><svg><use href="#ico-mic"/></svg></span><span class="ac-ln">Escuchar en vivo</span><span class="ac-lt">Podcast</span></a><div class="ac-act"><button class="bcopy" onclick="copiarLink('https://mixlr.com/mentesmaestras',this)" title="Copiar link"><svg><use href="#ico-copy"/></svg></button></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. PLANTILLAS -->
+  <div class="sec" data-cat="plantillas">
+    <div class="sec-t">Plantillas</div>
+    <div style="background:#f5f0e8;border-radius:16px;padding:16px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+        <div style="width:36px;height:36px;background:#854f0b;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="18" height="18" fill="none" stroke="#fff" stroke-width="2"><use href="#ico-award"/></svg>
+        </div>
+        <p style="font-size:13px;font-weight:700;color:#633806;margin:0;">Descarga tus plantillas</p>
+      </div>
+      <div class="ac" style="background:#fff;">
+
+        <div class="ac-i">
+          <div class="ac-h" onclick="toggleAc(this)">
+            <div class="ac-iw"><svg><use href="#ico-award"/></svg></div>
+            <span class="ac-n">Plantillas de Rangos</span>
+            <span class="ac-f"><svg><use href="#ico-chevron"/></svg></span>
+          </div>
+          <div class="ac-b" style="padding:0;">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--borde);gap:12px;">
+              <span style="font-size:14px;font-weight:500;color:var(--txt);">Planner</span>
+              <a href="https://drive.google.com/uc?export=view&id=1Qy7b3sNHEkys3UsmvTynMlHBae3Rgfr2" download target="_blank" style="background:var(--azul);border:none;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0;text-decoration:none;color:#fff;">
+                <svg width="17" height="17" fill="none" stroke="#fff" stroke-width="2"><use href="#ico-download"/></svg>
+              </a>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--borde);gap:12px;">
+              <span style="font-size:14px;font-weight:500;color:var(--txt);">Manager</span>
+              <a href="https://drive.google.com/uc?export=view&id=12dv1YUlLkdmL4BRMjM2YCzHnmCEyxq9E" download target="_blank" style="background:var(--azul);border:none;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0;text-decoration:none;color:#fff;">
+                <svg width="17" height="17" fill="none" stroke="#fff" stroke-width="2"><use href="#ico-download"/></svg>
+              </a>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--borde);gap:12px;">
+              <span style="font-size:14px;font-weight:500;color:var(--txt);">Senior Manager</span>
+              <a href="https://drive.google.com/uc?export=view&id=1rArNP5kqz78JFukj0oMIyp_xuxrXYbGQ" download target="_blank" style="background:var(--azul);border:none;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0;text-decoration:none;color:#fff;">
+                <svg width="17" height="17" fill="none" stroke="#fff" stroke-width="2"><use href="#ico-download"/></svg>
+              </a>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--borde);gap:12px;">
+              <span style="font-size:14px;font-weight:500;color:var(--txt);">Team Leader</span>
+              <a href="https://drive.google.com/uc?export=view&id=1pMQqZaXMGMp2IYQ0Qbas_xqNCEFN1S86" download target="_blank" style="background:var(--azul);border:none;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0;text-decoration:none;color:#fff;">
+                <svg width="17" height="17" fill="none" stroke="#fff" stroke-width="2"><use href="#ico-download"/></svg>
+              </a>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--borde);gap:12px;">
+              <span style="font-size:14px;font-weight:500;color:var(--txt);">Director</span>
+              <a href="https://drive.google.com/uc?export=view&id=18cbCzws7xc2otErB1SX9V1W31RhMa8P5" download target="_blank" style="background:var(--azul);border:none;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0;text-decoration:none;color:#fff;">
+                <svg width="17" height="17" fill="none" stroke="#fff" stroke-width="2"><use href="#ico-download"/></svg>
+              </a>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--borde);gap:12px;">
+              <span style="font-size:14px;font-weight:500;color:var(--txt);">Senior Director</span>
+              <a href="https://drive.google.com/uc?export=view&id=19a5s_-lBrzN329zMCz96IvxifN0zBta2" download target="_blank" style="background:var(--azul);border:none;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0;text-decoration:none;color:#fff;">
+                <svg width="17" height="17" fill="none" stroke="#fff" stroke-width="2"><use href="#ico-download"/></svg>
+              </a>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--borde);gap:12px;">
+              <span style="font-size:14px;font-weight:500;color:var(--txt);">National Director</span>
+              <a href="https://drive.google.com/uc?export=view&id=1JO1DcCBT6KGJ3RN6rPyR0ZFzPusBgMRz" download target="_blank" style="background:var(--azul);border:none;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0;text-decoration:none;color:#fff;">
+                <svg width="17" height="17" fill="none" stroke="#fff" stroke-width="2"><use href="#ico-download"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="ac-i">
+          <div class="ac-h" onclick="toggleAc(this)">
+            <div class="ac-iw"><svg><use href="#ico-gift"/></svg></div>
+            <span class="ac-n">Plantillas de Bienvenida Clientes</span>
+            <span class="ac-f"><svg><use href="#ico-chevron"/></svg></span>
+          </div>
+          <div class="ac-b" style="padding:0;">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--borde);gap:12px;">
+              <span style="font-size:14px;font-weight:500;color:var(--txt);">Bienvenida Cliente Mujer</span>
+              <a href="https://drive.google.com/uc?export=view&id=1xNcuKFTCv_52rko4BIHpGgZU4wCAIgxw" download target="_blank" style="background:var(--azul);border:none;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0;text-decoration:none;color:#fff;">
+                <svg width="17" height="17" fill="none" stroke="#fff" stroke-width="2"><use href="#ico-download"/></svg>
+              </a>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--borde);gap:12px;">
+              <span style="font-size:14px;font-weight:500;color:var(--txt);">Bienvenida Cliente Hombre</span>
+              <a href="https://drive.google.com/uc?export=view&id=1fVmh39eFuywdE3nWhhOs6Pa5_NPaB5SC" download target="_blank" style="background:var(--azul);border:none;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0;text-decoration:none;color:#fff;">
+                <svg width="17" height="17" fill="none" stroke="#fff" stroke-width="2"><use href="#ico-download"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px;border-top:1px solid var(--borde);padding:28px 20px 32px;background:var(--card);"><svg viewBox="0 0 160 30" xmlns="http://www.w3.org/2000/svg" style="height:28px;width:auto;"><text x="80" y="24" text-anchor="middle" font-family="Georgia,serif" font-size="26" font-weight="700" letter-spacing="6" fill="#1a3a5c">RIMAN</text></svg><p>Equipo Riman Mastermind</p></footer>
+
+
+<button id="calc-fab" onclick="toggleCalcPanel()" title="Calculadora de Precios">
+  <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+</button>
+
+<div id="calc-panel">
+  <div class="cp-header">
+    <span class="cp-title">Calculadora de Precios</span>
+    <button class="cp-close" onclick="toggleCalcPanel()">✕</button>
+  </div>
+  <div class="cp-body">
+    <div class="cp-tabs">
+      <button class="cp-tab active" onclick="cpTab('icd',this)">ICD</button>
+      <button class="cp-tab" onclick="cpTab('botalab',this)">Botalab</button>
+    </div>
+
+    <div id="cp-icd" class="cp-list">
+      <div class="cp-item" style="display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--borde);border-radius:10px;padding:10px 12px;">
+        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAA4ADgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD6pooooAKKpahe/ZR8oBbGTnt6VHBqkc0UgI2SqPuk5DfQ0uZXsBb+1RH/AFbCTDbTsO7afepq4mzvDDqdyYtw2SAuAeDnjJrobO4mNyoZiwY4INCd0Bq0UUUwCgnAJxn2oqveXaW0bE/M/wDCg6sT0FAHO6tMzyvuBBU8g+tRxQeX9mV+Xd8t7ZHFadzGkcSJPGJpMNK7jruxnj27fQVBdNF5lksLZV5mLkjByF4H61m1bUBV0yKxPmozMWfL7iTuHoeela9hHGYUlVQGYZ69KpXUivA+xiTFIFYEd+D/AFFXtOYNZx7egyPyNVECzRRRVAFZd/YSzXAdCrL1AZiNp/CtSigDnbf5bi53bWaNlt9xzyOBn9ao3K/Z9Qs4AcqJX/8AQQauxlRe36uwB+0BgD7YNU74q2q27ggoJW+bPA+UVg2Mvgnyr/J/5ev6JWrpX/Hkv+83/oRrKmaJIpdjJmWQOQHJy3A/oK19NUpaKrDB3Nx+JrSLEWaKKKsAooooAr3VlBdFTMmSvQg4qNdMtV6RkjBHLHvRRQAsWn20X3EI/wCBGrSKEXC9KKKAFooooA//2Q==" style="width:44px;height:44px;border-radius:8px;object-fit:cover;flex-shrink:0;min-width:44px;">
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:12px;font-weight:600;color:var(--txt);line-height:1.3;">BooSeBoo — First Package</div>
+          <div style="font-size:11px;color:#1a3a5c;font-weight:600;">$111,685 CLP · 4,693 pts</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;">
+          <button onclick="cpQty('booseboo__first_package',-1)" style="width:26px;height:26px;border-radius:50%;border:1px solid var(--borde);background:var(--card);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--txt);">−</button>
+          <span id="qty-booseboo__first_package" style="font-size:13px;font-weight:700;min-width:14px;text-align:center;color:var(--txt);">0</span>
+          <button onclick="cpQty('booseboo__first_package',1)" style="width:26px;height:26px;border-radius:50%;border:none;background:#1a3a5c;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;">+</button>
+        </div>
+      </div>
+      <div class="cp-item" style="display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--borde);border-radius:10px;padding:10px 12px;">
+        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAA3ADgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD6pooqre3Yt8Io3SHnHYD3pNpasErlqislL+YH5sEfSrcN6jkBuPepVSLKcWi3RQORxRVkhRRRQAVlXSbr2U+wH6Vq1UvLfduljOHC8g9DUzV0NOxnqQI9xUGnb1/55j86xF1eUsIvIU8Ichj3IFS3OrpBJtMUh+sbD+lZpoNTZjuHCnYdoB+tXLG8juAUEgaZB84xjFcu2sMCgSEFXfaCSR2z0q/4alSS9nIYeYyBivpzVRlrYR0dFFFaAFNlGY2HqCKdRQBwlqiafILfUXUyqAc5xkdq0ml06eQOwiZh/EXGf5Vp6npMd9ciWSGByBgFs5qt/wAI5b4/497YH6E1lyW2K0My/EEqt9nliRycgs+eai0FRb3rBJBJII0Vivds9q2D4eix8sNr+RFW9L0iKylMuyMP0AQf1NTyO47pGpRRRW5AUUUUAFFFFABRRRQAUUUUAf/Z" style="width:44px;height:44px;border-radius:8px;object-fit:cover;flex-shrink:0;min-width:44px;">
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:12px;font-weight:600;color:var(--txt);line-height:1.3;">ICD Dermatology Cream</div>
+          <div style="font-size:11px;color:#1a3a5c;font-weight:600;">$74,460 CLP · 3,129 pts</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;">
+          <button onclick="cpQty('icd_dermatology_cream',-1)" style="width:26px;height:26px;border-radius:50%;border:1px solid var(--borde);background:var(--card);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--txt);">−</button>
+          <span id="qty-icd_dermatology_cream" style="font-size:13px;font-weight:700;min-width:14px;text-align:center;color:var(--txt);">0</span>
+          <button onclick="cpQty('icd_dermatology_cream',1)" style="width:26px;height:26px;border-radius:50%;border:none;background:#1a3a5c;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;">+</button>
+        </div>
+      </div>
+      <div class="cp-item" style="display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--borde);border-radius:10px;padding:10px 12px;">
+        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAA4ADgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD6pooooAgnu44X2PuzjPAzUX9owZ/j/wC+TTdSHIPtWPa6jayXstqkoaeNdzADgdeM+vFYSnJOyC50EF1FMxVCd3oRipqw9DbzdQunPRflH6VuVrBtq7AKKKKoApk0scETSzSLHGoyzOcAD3NPrjPH0zPNa2YfIZS/ldAecZPrj0rnxVf6vSdS1/I1oUvazUL2Nh9Utb+UpZy+b5Y5dR8pz6HvWFb2NrbarPdRT5kdSvlZHyn5s4/M8U7w7FFDb7I+cjk+tT3ltBEhZUwV5HzH/GuanUnUgpz3fYmvBQm1HZFvwlMrm7JOD5h5P+faukrmPBUAexeZxnc5IH4munrvh8KICiiiqAK87+KVldC6stStQzeWpRlAzxnP9f0r0SkYBgQwBB7GuTG4VYqi6V7eZvhq/sKina55z4a1KKeWFQfnlQsQO2PWtjWJFFuxDLyPWtm80mxiWS5gtYY5wPvquPrXO+I1WPTpHCR5VTjCiuelRqUYclR3fkTiakak+aCsbXgkY0C3P94Z/rW9WV4WiEWhWijp5a/yFatektEZBRRRTAKKKKAEdQ6lWGVPBFUZ9ItJ0KTIXQ9VY5FFFJpPcC3bwpbwrFEMIvAHpUlFFMAooooA/9k=" style="width:44px;height:44px;border-radius:8px;object-fit:cover;flex-shrink:0;min-width:44px;">
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:12px;font-weight:600;color:var(--txt);line-height:1.3;">ICD Calming Balance Gel</div>
+          <div style="font-size:11px;color:#1a3a5c;font-weight:600;">$44,000 CLP · 1,849 pts</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;">
+          <button onclick="cpQty('icd_calming_balance_gel',-1)" style="width:26px;height:26px;border-radius:50%;border:1px solid var(--borde);background:var(--card);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--txt);">−</button>
+          <span id="qty-icd_calming_balance_gel" style="font-size:13px;font-weight:700;min-width:14px;text-align:center;color:var(--txt);">0</span>
+          <button onclick="cpQty('icd_calming_balance_gel',1)" style="width:26px;height:26px;border-radius:50%;border:none;background:#1a3a5c;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;">+</button>
+        </div>
+      </div>
+      <div class="cp-item" style="display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--borde);border-radius:10px;padding:10px 12px;">
+        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAA4ADgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD6pooooAa8ioQGOM1XudQtbYEzShQPYmm3/wB+P6Gub8RnEMn0pN2Fc69WDDKkEe1LWH4S/wCPGf8A67H+QrcpjCiiigAooooApah9+P6GuZ8StiJ/pWzr11LDc20USxEurEmQkY5AHT61h6ytxNZytKsKsOoViR/KuWri6NOXLOVmUqcpapFnwdcSCzuDuJ/fHr9BXVQyCRAw47EVyvhiIR29wse5h5uenPQV1FrGY4sN94nJ9q6UJktFFFMQUyaQRIWan1DdRmSMADoc+9AGLq0iXFzbnaAQO/8AvLTNQhj+yz/KOhqS8jAuLYFmQsrHkejA0agubSZh0wawlTjJttBdrYu6IoRLgDpvH/oIrSqhpKlROD/fH/oIq/W4BRRRQAUUUUAV7u0jucMw2yqCEcdVzVCTR5JQVkui6HqpTg/rRRSsgNCztzbowaQyMxyTjHbFT0UUwCiiigD/2Q==" style="width:44px;height:44px;border-radius:8px;object-fit:cover;flex-shrink:0;min-width:44px;">
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:12px;font-weight:600;color:var(--txt);line-height:1.3;">ICD Two Phase Oil Mist</div>
+          <div style="font-size:11px;color:#1a3a5c;font-weight:600;">$44,000 CLP · 1,849 pts</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;">
+          <button onclick="cpQty('icd_two_phase_oil_mist',-1)" style="width:26px;height:26px;border-radius:50%;border:1px solid var(--borde);background:var(--card);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--txt);">−</button>
+          <span id="qty-icd_two_phase_oil_mist" style="font-size:13px;font-weight:700;min-width:14px;text-align:center;color:var(--txt);">0</span>
+          <button onclick="cpQty('icd_two_phase_oil_mist',1)" style="width:26px;height:26px;border-radius:50%;border:none;background:#1a3a5c;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;">+</button>
+        </div>
+      </div>
+      <div class="cp-item" style="display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--borde);border-radius:10px;padding:10px 12px;">
+        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAA4ADgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD6pooooAqaneNZQI8dpc3bM2wR26gkcE5OSABx1z3Fcp4S+JOjeJ/EOraLaQ31te6WFNx9rjVFBY4ABDHJrr9QuVs7G4uXUssMbSEDqQoJ/pXyv8IfFtle/GfxY8VpLF/bghu4CSp8lQnmbWA6/eHT0oA+q2mjVipddw6j0qQEEZBBHqKoxhDEpiwUYbg397Pep7cbWIHQjOKSYyeiiimIKCQoJYgAdzRVFz58rO/MaMVRexI6mk3YCj4lYXNnBDFLhZLhEcAsAynOQcEcV59o+haMt7qk+k2MME1lFtjnWPyzjGBgrhiMccntXoGsMFjtWPAFwhPH1rJJskXWvs1s0Ek6BmyuATt/SsZt3KRt6TKZoCFwFRii8dgBWrEmxe5Y8kms3w/Eq20hGf8AWH+QrVrZIkKKKKYBVEDCbe6sQfzzV6opYQx3KcN/Ok0Bk6jybP8A6+U/kai1QnytWGTzCv8AI1NrDJbLaSXLxxILlPmZsDODWTqeqWitqvmXMSRmFQGZgBnHT61hPctG9oIxaOP+mh/kK0qz9EGLaUH/AJ6H+QrQroICiiigAooooAgvbS2voDBeQRTwkglJUDDI6cGsiTwrpUhG6ztmwcjfAjdOnUUUUWA2LS3FtGVDMxLFiW6k1NRRQAUUUUAf/9k=" style="width:44px;height:44px;border-radius:8px;object-fit:cover;flex-shrink:0;min-width:44px;">
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:12px;font-weight:600;color:var(--txt);line-height:1.3;">ICD Moisture Cleansing Oil</div>
+          <div style="font-size:11px;color:#1a3a5c;font-weight:600;">$40,615 CLP · 1,707 pts</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;">
+          <button onclick="cpQty('icd_moisture_cleansing_oil',-1)" style="width:26px;height:26px;border-radius:50%;border:1px solid var(--borde);background:var(--card);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--txt);">−</button>
+          <span id="qty-icd_moisture_cleansing_oil" style="font-size:13px;font-weight:700;min-width:14px;text-align:center;color:var(--txt);">0</span>
+          <button onclick="cpQty('icd_moisture_cleansing_oil',1)" style="width:26px;height:26px;border-radius:50%;border:none;background:#1a3a5c;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;">+</button>
+        </div>
+      </div>
+      <div class="cp-item" style="display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--borde);border-radius:10px;padding:10px 12px;">
+        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAA4ADgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD6pooqnqVy0EYWIjzG9ew9aTdldjSuW2bapPoM1TOoxh9rAj1NY8Ym8wu8rHPXJ5I9KpXZxfHJOMHv7Vg6rdrDasddbzJcRLJE25G6HFSVl+G336WnOQGYD861K6CQooooAKxtaYxXCSSBvKK4DAZ2n3rZpshwpqZx5lYadmYKkMm5GDKe4rLvVLXbYK8gjr7VrTIyyjcFY5xu24Nc/wD2klxqksMYb90RliBz61zyjYcmaHg3zxp22AqqiRsg8iusjLFBvxu746Vxfhq9uLcX8aQxsBNkHoRn/wDVXXWM7XEAdk2NnBGa2hNPQGnuWKKKK0JCkddwpaKAMW93LLhkYD1xxXMM0Z1ORltmiZyPnKkb8evHFdvqf/Ho31H865K7dWueGBNc9XRgR+H/APWX3/XQfyNdhpakWalurEt+tct4Z024a8vlaTFuXVhIMbjx0x/WuyijWKNUQYVRgVVOLTuy5O6sOooorYgKKKKAEZQwwwBHoay5dFjd2bz5Rk5xwcfpRRSsBa06wjsVkEbuxc5JardFFMAooooA/9k=" style="width:44px;height:44px;border-radius:8px;object-fit:cover;flex-shrink:0;min-width:44px;">
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:12px;font-weight:600;color:var(--txt);line-height:1.3;">ICD Multi Stick Balm</div>
+          <div style="font-size:11px;color:#1a3a5c;font-weight:600;">$32,715 CLP · 1,375 pts</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;">
+          <button onclick="cpQty('icd_multi_stick_balm',-1)" style="width:26px;height:26px;border-radius:50%;border:1px solid var(--borde);background:var(--card);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--txt);">−</button>
+          <span id="qty-icd_multi_stick_balm" style="font-size:13px;font-weight:700;min-width:14px;text-align:center;color:var(--txt);">0</span>
+          <button onclick="cpQty('icd_multi_stick_balm',1)" style="width:26px;height:26px;border-radius:50%;border:none;background:#1a3a5c;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;">+</button>
+        </div>
+      </div>
+      <div class="cp-item" style="display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--borde);border-radius:10px;padding:10px 12px;">
+        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAA4ADgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD6pooooAQsB1IH1o3r/eX86zda2BYnZFccjmudbVrAagtmIAZDnkDgEY4/X9KwnWcXYdjtAQehBpa5E3bi8gjtf3W+RUO3uM111aQlzRuJhRRRVgFUr6Yg+WpwO9XazNQRlnLkfI+MH0PpUTvbQDPv3C2zMQSF5IArmPKtBqIvN0gZQTsxwSSDkfr+ddTccxGsh441BIRQfpXDU0ZVrkFpdD+29NAUsrsX/nXdxTRyHCNk+lcBbDPiWxH92Nj+hrq4kkaUCH745yTgCuqk2kkJmxRTY92xfMxvxzjpRW4h1NkRZEKuAynqDTqKAMjULQwxMysCme/UVgT966rVhusXGSOR0rj5rZd3Vv0/wrhrxSloUiK2Rv8AhJYH2nYsB+bHHSuw0xJC7SYAjxjJ6msXQ0P9tRkknELdfwrqlUKMKAB6AV1U42SYhaKKK0EFFFFADZY1lQpIMqe1YcmhSsxIukxnvF/9eiipcU90BPpmkSWl6biS4Eh2FAoTH9a16KKoAooooA//2Q==" style="width:44px;height:44px;border-radius:8px;object-fit:cover;flex-shrink:0;min-width:44px;">
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:12px;font-weight:600;color:var(--txt);line-height:1.3;">ICD Sun Protector SPF50 PA+++</div>
+          <div style="font-size:11px;color:#1a3a5c;font-weight:600;">$32,715 CLP · 1,375 pts</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;">
+          <button onclick="cpQty('icd_sun_protector_spf50_pa',-1)" style="width:26px;height:26px;border-radius:50%;border:1px solid var(--borde);background:var(--card);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--txt);">−</button>
+          <span id="qty-icd_sun_protector_spf50_pa" style="font-size:13px;font-weight:700;min-width:14px;text-align:center;color:var(--txt);">0</span>
+          <button onclick="cpQty('icd_sun_protector_spf50_pa',1)" style="width:26px;height:26px;border-radius:50%;border:none;background:#1a3a5c;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="cp-botalab" class="cp-list" style="display:none;">
+      <div class="cp-item" style="display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--borde);border-radius:10px;padding:10px 12px;">
+        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAA2ADgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD6pooqKeYRKOMk0ASkgAkkADqTWO3ijQFXc2uaWFxnJu48fnmrE92TBLlQV2N0+lfFmua1JpmpafcReb5XkFJIUbCyDlee3v0oA+37eaK5gjmt5ElhkUMkiMGVgehBHUVJXIfC6Rm8J6cpYlFtYgo7AYPSuvoAKKKKACqt9GWUMO3FWqKAMZBg4PBzzXyp4k05JdcjhmK7TLI3yybQ4Ej4OccbtvygDuK9/wDjJPPa6RpkFpO1ut7fLbzFDgsmxmK57A4FcpL4P0G6cG7tYZXk2lncgnIHy/THbHSlsM9W8KQtDpUAkSNWEMYzGMKflHQVtV518M5JbG61TTkunnsYJIlijZ93lbgcgHrjjpXotMQUUUUAFFFFAHj/AO0Uzx+HdI80JKh1AY3D/pm9fPeqyJ9qdvJjwRjbzj6819M/HbRbzWdB0oWdpc3UVvfCa4W2XdIqeW4yB35IryiLwTa3eGk0TxflxkEWqEfmelS0UmW/2aLnZdeIfLVIwZ7XhR14kr6UhkEibhx2NeK/Cbwm+g3+rSRWd/Bb3MtuYlu0CyNtVs5A4GC2K9otozFFhsbicnFNCZLRRRTEFFFFABURtoCcmGLP+4KKKAHrFGpBVFBHoKdRRQAUUUUAf//Z" style="width:44px;height:44px;border-radius:8px;object-fit:cover;flex-shrink:0;min-width:44px;">
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:12px;font-weight:600;color:var(--txt);line-height:1.3;">Deserticola Plus Hair Oil Serum</div>
+          <div style="font-size:11px;color:#1a3a5c;font-weight:600;">$44,000 CLP · 1,849 pts</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;">
+          <button onclick="cpQty('deserticola_plus_hair_oil_serum',-1)" style="width:26px;height:26px;border-radius:50%;border:1px solid var(--borde);background:var(--card);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--txt);">−</button>
+          <span id="qty-deserticola_plus_hair_oil_serum" style="font-size:13px;font-weight:700;min-width:14px;text-align:center;color:var(--txt);">0</span>
+          <button onclick="cpQty('deserticola_plus_hair_oil_serum',1)" style="width:26px;height:26px;border-radius:50%;border:none;background:#1a3a5c;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;">+</button>
+        </div>
+      </div>
+      <div class="cp-item" style="display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--borde);border-radius:10px;padding:10px 12px;">
+        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAA1ADgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD6pooooAbJIsUbSSMFRQWZj0AHeuMtfin4LubsW0Wv23mlgi7lYKxPTDEYwc9c11Gp3sVnazySLvWNGdh14AyfrxXxRpmkXVr43scyQloXjnkCyAqUDBuucE4I4/KgD7kornPDk8sekwgyb2Bbdk553GuggkEsYbGPUUAPooooAKZPJ5UTPjOKfVa/lEcBHduBQByniXXFsGjt0j8/ULtJDBETtU7QMlm7D5h7+leKxeCtZh1+3vs6a9zFHGkiieVQ0alOBleD8o5r0vxiR/wmXh7HP+j3WT+MdSsAL0nHJjpFG94JvLO+tJ4I3MdxBMyzRt94McNweh4I5FddGixoFUYAryLwax/4SPUemPtw7f8ATutep6d5mxtwITtmmIuUUUUCCqt/bmVNyffXpVqigDwj4za5daL4j8My2oh3NFcqTJGW/uehFedX3xT1uO/jCrYFBwWNuwPPtv5r2P4x+FF1rWdCnkhvDaQR3HmSWybtjHZjIweuD+VeX3fgXw68r7JtfecchDZPgn0/1dSVodX8EdWuvEGpXk86oshvSSyJtUYgA6ZPpXvcUYjTaMnuSe5ryL4O+HV8PzzKkN1FHNdl4zcLtZ1EIycYHfI/CvYKpCYUUUUCCiiigBGVXUqwBU8EHvVc2FqesK4oooAdBZ20D74oI0fpuC8/nU9FFABRRRQB/9k=" style="width:44px;height:44px;border-radius:8px;object-fit:cover;flex-shrink:0;min-width:44px;">
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:12px;font-weight:600;color:var(--txt);line-height:1.3;">Deserticola Plus Shampoo</div>
+          <div style="font-size:11px;color:#1a3a5c;font-weight:600;">$41,740 CLP · 1,754 pts</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;">
+          <button onclick="cpQty('deserticola_plus_shampoo',-1)" style="width:26px;height:26px;border-radius:50%;border:1px solid var(--borde);background:var(--card);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--txt);">−</button>
+          <span id="qty-deserticola_plus_shampoo" style="font-size:13px;font-weight:700;min-width:14px;text-align:center;color:var(--txt);">0</span>
+          <button onclick="cpQty('deserticola_plus_shampoo',1)" style="width:26px;height:26px;border-radius:50%;border:none;background:#1a3a5c;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;">+</button>
+        </div>
+      </div>
+      <div class="cp-item" style="display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--borde);border-radius:10px;padding:10px 12px;">
+        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAA4ADYDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD6pooqG4uBEMAbm9M4oAfPKkMe9846cVEl7AzBd+CemRisrV79xa+WUTMjhVIcDB698ehrnLy6MgKYYgnZzjqQSOPwNQ5pOw7HoFFQ2W0WcAjOUCLjnPGKmqxBRRRQAViXBYzMW9STW3Wfe2rFmdOQe3pSY0YElydQle305RPJbTqJ2DbRGy4baT3PI6VRuradJA8Fu80O8hnSUAqSu0cEc/e9aX4e8ap4qz/0F5v/AEGOt2D5NJdxwWmX/wBDUVx88m7+v4F2Re0C7tLvS4GsZUkjRfLO09CvBB+hBFaNed/D26WGKIYyWN3wOOly9egQSrNHuX6EeldVOXNFNkNWJKKKKsQUUU2WRYkLOcAUAcXolu2jX3iAzSI5vL2W4j2g/KGAAB46/LV2e8ji0xLfDbtytu7HDhj+gpmn6hBqN1qC2jMzQ3TwSAqRhweR79RzRqUctpCZpgFiBVSSe7MFH6kVyKMN0+5pqZvg3SzC0UTSAyqLhyQpAw8xYDnuM13FrB5EZXOSTkmuV8GXCXtwt1ASYWWaMEgj5kk2t19wa7CuimkoqxDYUUUVYgqK5i86IpnHcUUUAYa+HRDNJNZutu8spmkC5xI5xlj78VI2kXDxtHJLG6MclWLEdc/zoorL2FO9+VFc8u5PomjrpiqkflJEgbakakAFm3Mcnrk5P41rUUVokkrIkKKKKYH/2Q==" style="width:44px;height:44px;border-radius:8px;object-fit:cover;flex-shrink:0;min-width:44px;">
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:12px;font-weight:600;color:var(--txt);line-height:1.3;">Suamel Nourishing Body Wash</div>
+          <div style="font-size:11px;color:#1a3a5c;font-weight:600;">$39,490 CLP · 1,659 pts</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;">
+          <button onclick="cpQty('suamel_nourishing_body_wash',-1)" style="width:26px;height:26px;border-radius:50%;border:1px solid var(--borde);background:var(--card);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--txt);">−</button>
+          <span id="qty-suamel_nourishing_body_wash" style="font-size:13px;font-weight:700;min-width:14px;text-align:center;color:var(--txt);">0</span>
+          <button onclick="cpQty('suamel_nourishing_body_wash',1)" style="width:26px;height:26px;border-radius:50%;border:none;background:#1a3a5c;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;">+</button>
+        </div>
+      </div>
+      <div class="cp-item" style="display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--borde);border-radius:10px;padding:10px 12px;">
+        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAA4ADYDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD6pooooAyPFGv2vhzTBfXsVxLGZUhCQIGYsxwOCRXHzfF7RIpbyL+ztYeS0XdOiQxkxj1I31P8braa+8B3MVm4WeOeGUfNt6OO/Qfia+Vr7T9Y1DxFNDZ3Jjllc+avnqMgMAQSG+YZ7c57UDPuOzuYru3jmhbKuobHcZGeamrmvA0pksZlYgmNlTpjooBrpaBBRRRQAVXvJjGoVTgnv6CrFZl+Sbgg9gKTGjjPGupG7jutCtEVruaEF2kyERCc9up4rzaPwRd2Gp3GsI1u1y+5yu99vLBjx9VFdpq7EfEK5A/584/5Grd6zGxl/wCubfyNCQ7ml4G1a1ntXhhZo7pJSXVh1JAPB78Yru4JPNiDd+9eO+As/a+ev20f+ihXrenEmJh6NQJlqiiimIKo6jEeJAOOhq9QQCMHkUAeA+O/EjaP8S54VtEnP2KJuZhGeQR3HtXNXvxZIE1uNE+YKQSb1cc+4Wrfxr0y6m+KMr2dpNMpsYlBjXdz83FeV6l4Y1p9/wDxKdQCbc5+zMf6VOpR7Z8G9fGvhpjbi3kGoFfLV944iA64Fe9WkZihAP3jya+fP2ZtGudP0yZr2B4ZV1EqFlXa2DECDivommhBRRRTEFFFFAHM+IPCFnqupjU0eWG/CCMsrfKyjOMj15PIrGPgaQCQC6uj5mQ2Z8/lnp+FFFAGp4a8Lf2O6CEKkQl85yzl3kfbtGeAAMV1dFFABRRRQB//2Q==" style="width:44px;height:44px;border-radius:8px;object-fit:cover;flex-shrink:0;min-width:44px;">
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:12px;font-weight:600;color:var(--txt);line-height:1.3;">Deserticola Plus Conditioner</div>
+          <div style="font-size:11px;color:#1a3a5c;font-weight:600;">$33,850 CLP · 1,422 pts</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;">
+          <button onclick="cpQty('deserticola_plus_conditioner',-1)" style="width:26px;height:26px;border-radius:50%;border:1px solid var(--borde);background:var(--card);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--txt);">−</button>
+          <span id="qty-deserticola_plus_conditioner" style="font-size:13px;font-weight:700;min-width:14px;text-align:center;color:var(--txt);">0</span>
+          <button onclick="cpQty('deserticola_plus_conditioner',1)" style="width:26px;height:26px;border-radius:50%;border:none;background:#1a3a5c;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;">+</button>
+        </div>
+      </div>
+      <div class="cp-item" style="display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--borde);border-radius:10px;padding:10px 12px;">
+        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAzADgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD6pooooAgublLcqHVju/uiof7ShzjbJ+VQa78sUL+jY/SsKO7mMgUw4GcE81nKTTsWldHUwXkM0nlq4EmM7D1x64qxXN6D+81u4br5cQH5n/61dJVrYhhRRRTAKKKKAMzxCu7TyD/eFczHbRHGC/511WuDOnSH0IP61y8J+bHvWNRamkdhvh4zHV9Ukik27WVemfXrXZ2lws8eVZSw+9jsa4rw2Nx1Ek/KZ+fc46V2OnQtFEzOMM5zj0pwvcUi1RRRWpAUUUUAU9YGdNn+gP61yMBfzuVXGex/+tXZ36NJZTIg3MUIA9TXEFhBO6yuqspIILcg1nNXZUWa/gqy2W1xNIQWNw5AHToOa6esbwkB/ZAYfxSOf1rZq0rEhRRRTAKKKKACmNFGzZZEJ9SBRRQA5QAAAAB6CloooAKKKKAP/9k=" style="width:44px;height:44px;border-radius:8px;object-fit:cover;flex-shrink:0;min-width:44px;">
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:12px;font-weight:600;color:var(--txt);line-height:1.3;">Suamel Nourishing Body Cream</div>
+          <div style="font-size:11px;color:#1a3a5c;font-weight:600;">$32,715 CLP · 1,375 pts</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;">
+          <button onclick="cpQty('suamel_nourishing_body_cream',-1)" style="width:26px;height:26px;border-radius:50%;border:1px solid var(--borde);background:var(--card);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--txt);">−</button>
+          <span id="qty-suamel_nourishing_body_cream" style="font-size:13px;font-weight:700;min-width:14px;text-align:center;color:var(--txt);">0</span>
+          <button onclick="cpQty('suamel_nourishing_body_cream',1)" style="width:26px;height:26px;border-radius:50%;border:none;background:#1a3a5c;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="cp-resultado" class="cp-res" style="display:none;margin-top:12px;">
+      <div id="cp-envio" style="text-align:center;padding:8px;border-radius:8px;font-size:12px;font-weight:700;margin-bottom:10px;"></div>
+      <div class="cp-res-row"><span class="cp-res-label">Total a pagar</span><span class="cp-res-val" id="cp-v-precio"></span></div>
+      <div class="cp-res-div"></div>
+      <div class="cp-res-row">
+        <div><p style="font-size:12px;color:var(--txt2);margin:0;">Total Reward Points</p><p style="font-size:11px;color:#0f6e56;margin:0;">= pesos para próxima compra</p></div>
+        <span class="cp-res-pts" id="cp-v-pts"></span>
+      </div>
+      <button onclick="cpReset()" style="width:100%;margin-top:12px;height:36px;border-radius:8px;border:1px solid var(--borde);background:var(--card);font-family:inherit;font-size:12px;color:var(--txt2);cursor:pointer;">Limpiar</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<div id="lightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:999;flex-direction:column;align-items:center;justify-content:center;padding:16px;" onclick="cerrarLightbox()">
+  <img id="lb-img" src="" style="max-width:100%;max-height:80vh;border-radius:12px;object-fit:contain;">
+  <div style="display:flex;gap:12px;margin-top:16px;">
+    <button id="lb-wa" onclick="event.stopPropagation();waSendFoto()" style="background:#25d366;border:none;border-radius:10px;padding:0 20px;height:44px;color:#fff;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">📲 Compartir por WA</button>
+    <button onclick="cerrarLightbox()" style="background:rgba(255,255,255,.15);border:none;border-radius:10px;padding:0 20px;height:44px;color:#fff;font-family:inherit;font-size:13px;cursor:pointer;">Cerrar</button>
+  </div>
+</div>
+
+<script>
+function toggleAc(h){
+  const b=h.nextElementSibling;
+  const op=h.classList.contains('open');
+  document.querySelectorAll('.ac-h').forEach(x=>x.classList.remove('open'));
+  document.querySelectorAll('.ac-b').forEach(x=>x.classList.remove('open'));
+  if(!op){h.classList.add('open');b.classList.add('open');}
+}
+function filtrar(cat,btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.sec').forEach(s=>{
+    s.classList.toggle('oculta',cat!=='todo'&&s.dataset.cat!==cat);
+  });
+  document.getElementById('buscar').value='';
+}
+function buscar(){
+  const q=document.getElementById('buscar').value.toLowerCase().trim();
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('oculta'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelector('.tab').classList.add('active');
+  document.querySelectorAll('.card').forEach(el=>{
+    el.style.display=(!q||el.innerText.toLowerCase().includes(q))?'':'none';
+  });
+}
+function abrirLightbox(src,nombre){
+  const lb=document.getElementById('lightbox');
+  document.getElementById('lb-img').src=src;
+  document.getElementById('lb-wa').dataset.src=src;
+  document.getElementById('lb-wa').dataset.nombre=nombre;
+  lb.style.display='flex';
+  document.body.style.overflow='hidden';
+}
+function cerrarLightbox(){
+  document.getElementById('lightbox').style.display='none';
+  document.body.style.overflow='';
+}
+function waSendFoto(){
+  const btn=document.getElementById('lb-wa');
+  waSend(btn.dataset.src,btn.dataset.nombre);
+}
+function waSend(link,nombre){
+  const txt='👋 Te comparto la ficha de *'+nombre+'*:\n'+link;
+  window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank');
+}
+function copiarLink(url, btn){
+  navigator.clipboard.writeText(url).then(()=>{
+    btn.classList.add('copied');
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<svg width="16" height="16" fill="none" stroke="#fff" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>';
+    setTimeout(()=>{
+      btn.classList.remove('copied');
+      btn.innerHTML = orig;
+    }, 1800);
+  });
+}
+
+function filtrarCalc(linea, btn) {
+  document.getElementById('calc-icd').style.display = linea === 'icd' ? 'block' : 'none';
+  document.getElementById('calc-botalab').style.display = linea === 'botalab' ? 'block' : 'none';
+  document.getElementById('btn-icd').style.background = linea === 'icd' ? '#1a3a5c' : 'var(--card)';
+  document.getElementById('btn-icd').style.color = linea === 'icd' ? '#fff' : 'var(--txt2)';
+  document.getElementById('btn-botalab').style.background = linea === 'botalab' ? '#1a3a5c' : 'var(--card)';
+  document.getElementById('btn-botalab').style.color = linea === 'botalab' ? '#fff' : 'var(--txt2)';
+  document.getElementById('btn-icd').style.border = linea === 'icd' ? 'none' : '1px solid var(--borde)';
+  document.getElementById('btn-botalab').style.border = linea === 'botalab' ? 'none' : '1px solid var(--borde)';
+  document.getElementById('calc-resultado').style.display = 'none';
+  document.querySelectorAll('.calc-item').forEach(i => i.classList.remove('selected'));
+}
+
+function selProduct(el) {
+  document.querySelectorAll('.calc-item').forEach(i => i.classList.remove('selected'));
+  el.classList.add('selected');
+  const precio = parseInt(el.dataset.precio);
+  const pts = parseInt(el.dataset.pts);
+  const nombre = el.dataset.nombre;
+  document.getElementById('res-nombre').textContent = nombre;
+  document.getElementById('res-precio').textContent = '$' + precio.toLocaleString('es-CL');
+  document.getElementById('res-pts').textContent = '$' + pts.toLocaleString('es-CL');
+  document.getElementById('calc-resultado').style.display = 'block';
+}
+
+
+const CP_PRODUCTOS = {
+  "booseboo__first_package": {precio:111685, pts:4693},
+  "icd_dermatology_cream": {precio:74460, pts:3129},
+  "icd_calming_balance_gel": {precio:44000, pts:1849},
+  "icd_two_phase_oil_mist": {precio:44000, pts:1849},
+  "icd_moisture_cleansing_oil": {precio:40615, pts:1707},
+  "icd_multi_stick_balm": {precio:32715, pts:1375},
+  "icd_sun_protector_spf50_pa": {precio:32715, pts:1375},
+  "deserticola_plus_hair_oil_serum": {precio:44000, pts:1849},
+  "deserticola_plus_shampoo": {precio:41740, pts:1754},
+  "suamel_nourishing_body_wash": {precio:39490, pts:1659},
+  "deserticola_plus_conditioner": {precio:33850, pts:1422},
+  "suamel_nourishing_body_cream": {precio:32715, pts:1375},
+};
+
+function toggleCalcPanel(){
+  const p = document.getElementById('calc-panel');
+  p.classList.toggle('open');
+}
+function cpTab(linea, btn){
+  document.querySelectorAll('.cp-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('cp-icd').style.display = linea==='icd'?'flex':'none';
+  document.getElementById('cp-botalab').style.display = linea==='botalab'?'flex':'none';
+  cpCalc();
+}
+function cpQty(pid, delta){
+  const el = document.getElementById('qty-'+pid);
+  const v = Math.max(0, parseInt(el.textContent)+delta);
+  el.textContent = v;
+  cpCalc();
+}
+function cpCalc(){
+  let total=0, pts=0;
+  Object.keys(CP_PRODUCTOS).forEach(pid=>{
+    const el = document.getElementById('qty-'+pid);
+    if(!el) return;
+    const qty = parseInt(el.textContent)||0;
+    if(qty>0){
+      total += CP_PRODUCTOS[pid].precio * qty;
+      pts += CP_PRODUCTOS[pid].pts * qty;
+    }
+  });
+  const res = document.getElementById('cp-resultado');
+  if(total>0){
+    res.style.display='block';
+    document.getElementById('cp-v-precio').textContent = '$'+total.toLocaleString('es-CL');
+    document.getElementById('cp-v-pts').textContent = '$'+pts.toLocaleString('es-CL');
+    const envioEl = document.getElementById('cp-envio');
+    if(total>=180000){
+      envioEl.style.background='#e8f5f0';
+      envioEl.style.color='#0f6e56';
+      envioEl.textContent='✓ ¡Envío gratis!';
+    } else {
+      const falta = 180000-total;
+      envioEl.style.background='#fff3e0';
+      envioEl.style.color='#854f0b';
+      envioEl.innerHTML='⚠️ Te faltan <strong>$'+falta.toLocaleString('es-CL')+'</strong> para envío gratis<br><span style="font-size:10px;font-weight:400;">Recuerda cobrar el envío según la región del cliente</span>';
+    }
+  } else {
+    res.style.display='none';
+  }
+}
+function cpReset(){
+  document.querySelectorAll('[id^="qty-"]').forEach(el=>el.textContent='0');
+  document.getElementById('cp-resultado').style.display='none';
+}
+
+
+function checkFade(){
+  const s=document.getElementById('tabsScroll');
+  const f=document.getElementById('tabsFade');
+  if(!s||!f)return;
+  f.style.opacity=(s.scrollLeft+s.clientWidth>=s.scrollWidth-8)?'0':'1';
+}
+document.addEventListener('DOMContentLoaded',function(){
+  const s=document.getElementById('tabsScroll');
+  if(s)s.addEventListener('scroll',checkFade);
+  checkFade();
+});
+</script>
+</body>
+</html>
